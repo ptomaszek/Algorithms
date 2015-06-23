@@ -23,4 +23,36 @@ class VendorMachineCalcSpec extends FlatSpec with Matchers {
         }
     }
   }
+
+  it should "find all the possible changes" in {
+    Map(
+      (-1, Seq(5)) ->
+        Nil,
+      (0, Seq(5)) ->
+        Seq(Nil),
+      (50, Seq(5)) ->
+        Nil,
+      (50, Seq(25, 10, 10, 10, 5, 5, 5, 5, 5, 5)) ->
+        Set(
+          Seq(25, 10, 10, 5),
+          Seq(25, 10, 5, 5, 5),
+          Seq(25, 5, 5, 5, 5, 5),
+          Seq(10, 10, 10, 5, 5, 5, 5),
+          Seq(10, 10, 5, 5, 5, 5, 5, 5)
+        ),
+      (50, Seq(5, 10, 10, 10, 5, 5, 10, 15, 5)) ->
+        Set(
+          Seq(10, 10, 10, 5, 5, 5, 5),
+          Seq(10, 10, 10, 10, 5, 5),
+          Seq(15, 10, 10, 10, 5),
+          Seq(15, 10, 10, 5, 5, 5)
+        )
+    ).foreach {
+      case (givenMoneyAndAvailCoins, expectedResult) =>
+        givenMoneyAndAvailCoins match {
+          case (givenMoney, availCoins) =>
+            VendorMachineCalc.countPossibleChanges(givenMoney, availCoins) should contain theSameElementsAs expectedResult
+        }
+    }
+  }
 }

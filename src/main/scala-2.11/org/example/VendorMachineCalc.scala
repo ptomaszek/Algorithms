@@ -20,4 +20,17 @@ object VendorMachineCalc {
       }
     }
   }
+
+  /**
+   * @return a Set of possible changes
+   */
+  def countPossibleChanges(money: Int, availCoins: Seq[Int]): Set[Seq[Int]] = {
+    countPossibleChanges(money, Nil, availCoins).map(_.sorted.reverse).toSet // 'sorted.toSet' used to return unique changes only
+  }
+
+  private def countPossibleChanges(money: Int, usedCoins: Seq[Int], availCoins: Seq[Int]): Seq[Seq[Int]] = {
+    if (money == usedCoins.sum) Seq(usedCoins)
+    else if (availCoins.isEmpty) Seq()
+    else countPossibleChanges(money, usedCoins :+ availCoins.head, availCoins.tail) ++ countPossibleChanges(money, usedCoins, availCoins.tail)
+  }
 }
