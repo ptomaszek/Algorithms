@@ -1,4 +1,4 @@
-name := "VendorMachine"
+name := "Algorithms"
 
 version := "1.0"
 
